@@ -10,4 +10,10 @@ TAGS
 *.gcno
 *.gcda
 
+compile_commands.json
 */compile_commands.json
+
+gdb.txt
+*/gdb.txt
+.gdb_history
+*/.gdb_history
