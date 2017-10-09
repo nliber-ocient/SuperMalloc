@@ -186,12 +186,12 @@ void test_huge_malloc(void) {
   bassert(bin_from_bin_and_size(chunk_infos[c_n].bin_and_size) == first_huge_bin_number +1);
 
   // Now make sure that a, b, c, d are allocated with no overlaps.
-  bassert(abs(a_n-b_n)>=1);  // a and b must be separated by 1
-  bassert(abs(a_n-c_n)>=2);  // a and c must be separated by 2
-  bassert(abs(a_n-d_n)>=2);  // a and d must be separated by 2
-  bassert(abs(b_n-c_n)>=2);  // b and c must be separated by 2
-  bassert(abs(b_n-d_n)>=2);  // a and d must be separated by 2
-  bassert(abs(c_n-d_n)>=2);  // c and d must be separated by 2
+  bassert(abs((int)a_n-(int)b_n)>=1);  // a and b must be separated by 1
+  bassert(abs((int)a_n-(int)c_n)>=2);  // a and c must be separated by 2
+  bassert(abs((int)a_n-(int)d_n)>=2);  // a and d must be separated by 2
+  bassert(abs((int)b_n-(int)c_n)>=2);  // b and c must be separated by 2
+  bassert(abs((int)b_n-(int)d_n)>=2);  // a and d must be separated by 2
+  bassert(abs((int)c_n-(int)d_n)>=2);  // c and d must be separated by 2
 
   {
     chunknumber_t m1_n = address_2_chunknumber(reinterpret_cast<void*>(-1ul));
