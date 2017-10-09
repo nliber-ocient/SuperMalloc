@@ -9,3 +9,5 @@ TAGS
 *.gcov
 *.gcno
 *.gcda
+
+*/compile_commands.json
