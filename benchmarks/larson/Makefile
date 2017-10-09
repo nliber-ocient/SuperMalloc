@@ -6,4 +6,4 @@ $(TARGET): larson.cpp
 	$(CXX) $(CXXFLAGS) -Wall -W -Werror larson.cpp -o $(TARGET) -lpthread
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) compile_commands.json

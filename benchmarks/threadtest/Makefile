@@ -6,4 +6,4 @@ $(TARGET): threadtest.cpp
 	$(CXX) $(CXXFLAGS) threadtest.cpp -o $(TARGET) -lpthread
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) compile_commands.json

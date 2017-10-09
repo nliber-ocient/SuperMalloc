@@ -139,7 +139,7 @@ $(BLD)/objsizes: $(SRC)/objsizes.cc $(SRC)/malloc_internal.h $(SRC)/bassert.h $(
 	gnuplot $<
 
 clean:
-	rm -f *.d *.d.* *.o $(TESTS) $(BLD)/objsizes $(BLD)/generated_constants.h $(BLD)/generated_constants.cc $(IMPLEMENTATION_FILES) $(LIB)/*.so
+	rm -f *.d *.d.* *.o $(TESTS) $(BLD)/objsizes $(BLD)/generated_constants.h $(BLD)/generated_constants.cc $(IMPLEMENTATION_FILES) $(LIB)/*.so compile_commands.json
 
 .PHONY: other-mallocs
 other-mallocs:

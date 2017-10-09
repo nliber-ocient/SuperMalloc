@@ -8,4 +8,4 @@ FORCE:
 %.pdf: %.gnuplot %.data
 	gnuplot $<
 clean:
-	rm -f *.aux *.log *.pyg *.bbl *.blg *.fls *.fdb_latexmk onepage.pdf
+	rm -f *.aux *.log *.pyg *.bbl *.blg *.fls *.fdb_latexmk onepage.pdf compile_commands.json

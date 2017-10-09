@@ -24,7 +24,7 @@ check_thread-leak: thread-leak
 	LD_PRELOAD=../release/lib/libsupermalloc_pthread.so ./thread-leak
 
 clean:
-	rm -f $(TARGETS)
+	rm -f $(TARGETS) compile_commands.json
 .PHONY: check check_% \
  check-test-malloc_test-w1 \
  check-test-malloc_test-w2 \

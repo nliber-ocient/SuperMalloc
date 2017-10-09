@@ -36,7 +36,7 @@ tests_check: libsupermalloc.so
 	cd tests;$(MAKE) check
 .PHONY: clean
 clean:
-	rm -f *.o *.so generated_constants.h objsizes *.gcda *.gcno *.gcov
+	rm -f *.o *.so generated_constants.h objsizes *.gcda *.gcno *.gcov compile_commands.json
 	cd tests;$(MAKE) clean
 
 TAGS: $(wildcard *.cc) $(wildcard *.h) $(wildcard */*.cc) $(wildcard */*.c)  $(wildcard */*.h)
