@@ -56,12 +56,14 @@ main(void)
 	size      = 0x80000000LU;
 #endif
 	set_errno(0);
+#if __GNUC__ < 7
 	p = aligned_alloc(alignment, size);
 	if (p != NULL || get_errno() != ENOMEM) {
 		malloc_printf(
 		    "Expected error for aligned_alloc(%zu, %zu)\n",
 		    alignment, size);
 	}
+#endif /* __GNU_C__ < 7 */
 
 #if LG_SIZEOF_PTR == 3
 	alignment = UINT64_C(0x4000000000000000);
@@ -71,6 +73,7 @@ main(void)
 	size      = 0x84000001LU;
 #endif
 	set_errno(0);
+#if __GNUC__ < 7
 	p = aligned_alloc(alignment, size);
 	if (p != NULL || get_errno() != ENOMEM) {
 		malloc_printf(
@@ -91,6 +94,7 @@ main(void)
 		    alignment, size);
 	}
 	}
+#endif /* __GNUC__ < 7 */
 
 	for (i = 0; i < NITER; i++)
 		ps[i] = NULL;
