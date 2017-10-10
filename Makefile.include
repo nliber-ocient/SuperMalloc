@@ -167,14 +167,14 @@ $(PREFIXHEADER) : $(SRC)/supermalloc.h.m4
 
 endif
 
-ifdef PREFIXXO
+ifdef PREFIXSO
 
 $(PREFIXSO) : $(LIB)/libsupermalloc.so $(PREFIXHEADER)
 	cp -f ${<} ${@}
 
 endif
 
-ifdef pREFIXTHREADSO
+ifdef PREFIXTHREADSO
 
 $(PREFIXPTHREADSO) : $(LIB)/libsupermalloc_pthread.so $(PREFIXHEADER)
 	cp -f ${<} ${@}
