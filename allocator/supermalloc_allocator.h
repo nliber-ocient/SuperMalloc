@@ -60,6 +60,10 @@ protected:
 
     bool do_is_equal(const memory_resource& other) const noexcept override
     { maybe_unused(other); return true; }
+
+public:
+    static supermalloc_memory_resource* mr() noexcept
+    { static supermalloc_memory_resource smr; return &smr; }
 };
 
 #endif /* SUPERMALLOC_ALLOCATOR_H_ */
