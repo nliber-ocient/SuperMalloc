@@ -5,6 +5,17 @@
 #include <new>
 #include <type_traits>
 
+// Neither gcc7 nor clang5 support std::pmr::memory_resource
+// // so use std::experimental::pmr::memory_resource
+// // and dump it in namespace pmr for now
+#if __has_include(<memory_resource>)
+#include <memory_resource>
+namespace pmr { using namespace std::pmr; }
+#elif __has_include(<experimental/memory_resource>)
+#include <experimental/memory_resource>
+namespace pmr { using namespace std::experimental::pmr; }
+#endif
+
 template<typename T>
 class supermalloc_allocator
 {
@@ -34,6 +45,21 @@ public:
         maybe_unused(n);
         supermalloc_free(p);
     }
+};
+
+class supermalloc_memory_resource : public pmr::memory_resource
+{
+    template<typename... Ts> constexpr static void maybe_unused(Ts&&...) noexcept {}
+
+protected:
+    void* do_allocate(size_t bytes, size_t alignment) override
+    { return supermalloc_aligned_alloc(alignment, bytes); }
+
+    void do_deallocate(void* p, size_t bytes, size_t alignment) override
+    { maybe_unused(bytes, alignment); supermalloc_free(p); }
+
+    bool do_is_equal(const memory_resource& other) const noexcept override
+    { maybe_unused(other); return true; }
 };
 
 #endif /* SUPERMALLOC_ALLOCATOR_H_ */
