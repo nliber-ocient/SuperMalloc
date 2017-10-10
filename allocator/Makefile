@@ -7,6 +7,8 @@ LINKMODE  = static
 PREFIX    = supermalloc_
 include ../Makefile.include
 
-main : main.cpp
+supermalloc_allocator.h : supermalloc.h
+
+main : main.cpp supermalloc_allocator.h $(LIB)/libsupermalloc.so
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -fexceptions $(LDFLAGS) -lsupermalloc -o $(@) $(<)
 
