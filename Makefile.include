@@ -14,9 +14,15 @@ ifdef PREFIX
 
   PREFIX2         = $(patsubst %_,%,$(PREFIX))
   PREFIXHEADER    = $(PREFIX2).h
+
+ifeq ($(PREFIX2),supermalloc)
+	PREFIXDEFAULT = $(PREFIXHEADER)
+else
   PREFIXSO        = $(LIB)/lib$(PREFIX2).so
   PREFIXPTHREADSO = $(LIB)/lib$(PREFIX2)_pthread.so
   PREFIXDEFAULT   = $(PREFIXHEADER) $(PREFIXSO) $(PREFIXPTHREADSO)
+endif
+
 else
   PREFIXOPT =
   PREFIXDEFAULT =
@@ -154,16 +160,24 @@ other-mallocs:
 	(cd $(ROOT)/other-mallocs/tbb;make)
 	(cd $(ROOT)/other-mallocs/jemalloc; ./autogen.sh;make dist;make)
 
-ifdef PREFIX
+ifdef PREFIXHEADER
 
 $(PREFIXHEADER) : $(SRC)/supermalloc.h.m4
 	m4 -DPREFIX=$(PREFIX) ${<} > $(@)
 
+endif
+
+ifdef PREFIXXO
+
 $(PREFIXSO) : $(LIB)/libsupermalloc.so $(PREFIXHEADER)
-	ln ${<} ${@}
+	cp -f ${<} ${@}
+
+endif
+
+ifdef pREFIXTHREADSO
 
 $(PREFIXPTHREADSO) : $(LIB)/libsupermalloc_pthread.so $(PREFIXHEADER)
-	ln ${<} ${@}
+	cp -f ${<} ${@}
 
 endif
 
