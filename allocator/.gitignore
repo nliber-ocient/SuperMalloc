@@ -24,3 +24,5 @@ test-malloc_test
 test-no-overlaps
 test22
 test38
+
+main
