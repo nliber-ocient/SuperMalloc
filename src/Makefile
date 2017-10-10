@@ -3,8 +3,8 @@
 # LOGCHECK = -DENABLE_LOG_CHECKING
 OPTFLAGS = -O3 -flto
 
-C_CXX_FLAGS = -W -Wall -Werror $(OPTFLAGS) -ggdb -pthread -fPIC -mrtm $(COVERAGE)
-CXXFLAGS = $(C_CXX_FLAGS) -std=c++11
+C_CXX_FLAGS = -W -Wall -Werror $(OPTFLAGS) -ggdb3 -pthread -fPIC -mrtm $(COVERAGE)
+CXXFLAGS = $(C_CXX_FLAGS) -std=c++17
 CFLAGS = $(C_CXX_FLAGS) -std=c11
 CPPFLAGS += $(STATS) $(LOGCHECK)
 

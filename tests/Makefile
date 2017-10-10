@@ -1,6 +1,6 @@
 OPTFLAGS = -O2
 CPPFLAGS = -I../src
-CFLAGS = -ggdb -W -Wall -Werror -std=c99 $(OPTFLAGS)
+CFLAGS = -ggdb3 -W -Wall -Werror -std=c99 $(OPTFLAGS)
 LDFLAGS = -L../release/lib -Wl,-rpath,../release/lib
 LDLIBS = -lsupermalloc
 TARGETS = \

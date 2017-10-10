@@ -1,4 +1,4 @@
-CXXFLAGS = -W -Wall -Werror -O0 -g -std=c++11
+CXXFLAGS = -W -Wall -Werror -O0 -ggdb3 -std=c++17
 supermalloc.pdf: test-malloc_test-1K-aggregated.pdf
 
 %.pdf: %.gnuplot %.data

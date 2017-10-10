@@ -1,2 +1,2 @@
-CXXFLAGS=-std=c++11 -O3 -pthread -Wall -g
+CXXFLAGS=-std=c++17 -O3 -pthread -Wall -ggdb3
 manythreads:
