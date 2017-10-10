@@ -11,17 +11,24 @@ endif
 
 ifdef PREFIX
   PREFIXOPT = -DPREFIX=$(PREFIX)
+
+  PREFIX2         = $(patsubst %_,%,$(PREFIX))
+  PREFIXHEADER    = $(PREFIX2).h
+  PREFIXSO        = $(LIB)/lib$(PREFIX2).so
+  PREFIXPTHREADSO = $(LIB)/lib$(PREFIX2)_pthread.so
+  PREFIXDEFAULT   = $(PREFIXHEADER) $(PREFIXSO) $(PREFIXPTHREADSO)
 else
   PREFIXOPT =
+  PREFIXDEFAULT =
 endif
 
-C_CXX_FLAGS = -W -Wall -Werror $(OPTFLAGS) -ggdb -pthread -fPIC $(RTMFLAGS) $(COVERAGE)
-CXXFLAGS = $(C_CXX_FLAGS) -std=c++11 -fno-exceptions
+C_CXX_FLAGS = -W -Wall -Werror $(OPTFLAGS) -ggdb3 -pthread -fPIC $(RTMFLAGS) $(COVERAGE)
+CXXFLAGS = $(C_CXX_FLAGS) -std=c++17 -fno-exceptions
 CFLAGS = $(C_CXX_FLAGS) -std=c11
 CPPFLAGS += $(STATS) $(LOGCHECK) $(TESTING) -I$(BLD) $(PREFIXOPT)
 
 LIBOBJECTS = malloc makechunk rng huge_malloc large_malloc small_malloc cache bassert footprint stats futex_mutex generated_constants has_tsx
-default: tests $(LIB)/libsupermalloc_pthread.so
+default: tests $(LIB)/libsupermalloc_pthread.so $(PREFIXDEFAULT)
 .PHONY: default
 
 -include $(patsubst %, $(BLD)/%.d, $(LIBOBJECTS))
@@ -139,10 +146,24 @@ $(BLD)/objsizes: $(SRC)/objsizes.cc $(SRC)/malloc_internal.h $(SRC)/bassert.h $(
 	gnuplot $<
 
 clean:
-	rm -f *.d *.d.* *.o $(TESTS) $(BLD)/objsizes $(BLD)/generated_constants.h $(BLD)/generated_constants.cc $(IMPLEMENTATION_FILES) $(LIB)/*.so compile_commands.json
+	rm -f *.d *.d.* *.o $(TESTS) $(BLD)/objsizes $(BLD)/generated_constants.h $(BLD)/generated_constants.cc $(IMPLEMENTATION_FILES) $(LIB)/*.so $(PREFIXDEFAULT) compile_commands.json
 
 .PHONY: other-mallocs
 other-mallocs:
 	(cd $(ROOT)/other-mallocs/Hoard/src;make linux-gcc-x86-64)
 	(cd $(ROOT)/other-mallocs/tbb;make)
 	(cd $(ROOT)/other-mallocs/jemalloc; ./autogen.sh;make dist;make)
+
+ifdef PREFIX
+
+$(PREFIXHEADER) : $(SRC)/supermalloc.h.m4
+	m4 -DPREFIX=$(PREFIX) ${<} > $(@)
+
+$(PREFIXSO) : $(LIB)/libsupermalloc.so $(PREFIXHEADER)
+	ln ${<} ${@}
+
+$(PREFIXPTHREADSO) : $(LIB)/libsupermalloc_pthread.so $(PREFIXHEADER)
+	ln ${<} ${@}
+
+endif
+
