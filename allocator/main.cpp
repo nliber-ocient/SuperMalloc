@@ -6,7 +6,7 @@
 #include <string>
 
 template<typename Key, typename T, typename Hash = std::hash<Key>, typename Pred = std::equal_to<Key>>
-using SMunordered_map = std::unordered_map<Key, T, Hash, Pred, supermalloc::supermalloc_allocator<std::pair<const Key, T>>>;
+using SMunordered_map = std::unordered_map<Key, T, Hash, Pred, supermalloc::allocator<std::pair<const Key, T>>>;
 
 int main()
 {
