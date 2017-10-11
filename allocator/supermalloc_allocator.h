@@ -14,6 +14,42 @@ namespace supermalloc::pmr { using namespace std::pmr; }
 #elif __has_include(<experimental/memory_resource>)
 #include <experimental/memory_resource>
 namespace supermalloc::pmr { using namespace std::experimental::pmr; }
+#elif __has_include(<boost/container/pmr/memory_resource.hpp>)
+#include <boost/container/pmr/memory_resource.hpp>
+namespace supermalloc::pmr { using namespace boost::container::pmr; }
+#else
+#include <cstddef>
+
+namespace supermalloc::pmr
+{
+    class memory_resource
+    {
+    public:
+        virtual ~memory_resource() = default;
+
+        void* allocate(size_t bytes, size_t alignment = alignof(std::max_align_t))
+        { return do_allocate(bytes, alignment); }
+
+        void deallocate(void* p, size_t bytes, size_t alignment = alignof(std::max_align_t))
+        { return do_deallocate(p, bytes, alignment); }
+
+        bool is_equal(const memory_resource& other) const noexcept
+        { return do_is_equal(other); }
+
+        friend bool operator==(const memory_resource& a, const memory_resource& b) noexcept
+        { return &a == &b || a.is_equal(b); }
+
+        friend bool operator!=(const memory_resource& a, const memory_resource& b) noexcept
+        { return !(a==b); }
+
+    private:
+        virtual void* do_allocate(size_t bytes, size_t alignment) = 0;
+        virtual void do_deallocate(void* p, size_t bytes, size_t alignment) = 0;
+
+        virtual bool do_is_equal(const memory_resource& other) const noexcept = 0;
+    };
+} // supermalloc::pmr namespace
+
 #endif
 
 namespace supermalloc
