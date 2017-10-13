@@ -25,6 +25,6 @@ gdb.txt
 */.gdb_history
 
 # archives
-supermalloc-*.tar.gz
+libsupermalloc-*.tar.gz
 
 stage/
