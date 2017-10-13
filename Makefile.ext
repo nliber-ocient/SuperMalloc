@@ -1,4 +1,4 @@
-# This is a copy of the file found in ext/libsupermalloc
+# This is a template makefile for an ext library that conforms to the standard make process
 # Some conventions followed in this file are required to ensure the ext build process works
 
 REMOTE_ARCHIVE_PATH     = 192.168.110.5
@@ -8,10 +8,10 @@ REMOTE_ARCHIVE_PATH     = 192.168.110.5
 LIBNAME_VERSION	= $(shell cat version.txt)
 
 BASE_PATH	= $(shell pwd)
-ARCHIVE_NAME	= supermalloc-$(LIBNAME_VERSION).tar.gz
+ARCHIVE_NAME	= libsupermalloc-$(LIBNAME_VERSION).tar.gz
 ARCHIVE_PATH	= $(BASE_PATH)/$(ARCHIVE_NAME)
 
-SRC_PATH	= $(BASE_PATH)/supermalloc-$(LIBNAME_VERSION)
+SRC_PATH	= $(BASE_PATH)/libsupermalloc-$(LIBNAME_VERSION)
 
 # The stage path must contain the gcc version so we can keep binaries around that were
 # built with different versions of GCC as the source changes from branch to branch
