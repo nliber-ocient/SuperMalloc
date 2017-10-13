@@ -1,0 +1,83 @@
+# This is a copy of the file found in ext/libsupermalloc
+# Some conventions followed in this file are required to ensure the ext build process works
+
+REMOTE_ARCHIVE_PATH     = 192.168.110.5
+
+# The version of the library must be in a file called version.txt.  This mechanism allows us
+# to force rebuilds of the boostrap.* files when version numbers change
+LIBNAME_VERSION	= $(shell cat version.txt)
+
+BASE_PATH	= $(shell pwd)
+ARCHIVE_NAME	= supermalloc-$(LIBNAME_VERSION).tar.gz
+ARCHIVE_PATH	= $(BASE_PATH)/$(ARCHIVE_NAME)
+
+SRC_PATH	= $(BASE_PATH)/supermalloc-$(LIBNAME_VERSION)
+
+# The stage path must contain the gcc version so we can keep binaries around that were
+# built with different versions of GCC as the source changes from branch to branch
+STAGE_PATH	= $(BASE_PATH)/build-$(LIBNAME_VERSION)-gcc-$(GCC_VERSION)
+
+# Make sure the build ends up in the stage path, this is the standard way of doing this
+# but different libraries may have different mechanisms or need some extra copy commands
+# in this makefile
+CONFIGURE_OPTIONS	= --prefix=$(STAGE_PATH)
+
+# toolchain path must be definied to check the environment
+# this ensures that the make-env.sh script is run and environment variables are defined
+TOOLCHAIN_PATH = ../../toolchain
+include $(TOOLCHAIN_PATH)/checkenv.mk
+
+# grab the archive from the remote server
+$(ARCHIVE_PATH):
+	if [ ! -s $(ARCHIVE_PATH) ]; then \
+		(wget http://$(REMOTE_ARCHIVE_PATH)/$(ARCHIVE_NAME)); \
+	fi
+
+# create the source path by extracting the archive file
+$(SRC_PATH): $(ARCHIVE_PATH)
+	tar xvf $(ARCHIVE_PATH)
+
+# Make and make install to the stage path we configured above
+$(SRC_PATH)/Makefile: $(SRC_PATH)
+
+$(STAGE_PATH)/include/supermalloc_allocator.h: $(SRC_PATH)/Makefile
+	(cd $(SRC_PATH) && \
+		STAGE_PATH=$(STAGE_PATH) make install)
+
+# create a bootstrap file that depends on the version of the library and the
+# version of gcc configured
+bootstrap.mk: version.txt $(TOOLCHAIN_PATH)/gccversion.mk
+	@echo 'LIBSUPERMALLOC_INC_PATH = $(STAGE_PATH)/include' > bootstrap.mk
+	@echo 'LIBSUPERMALLOC_LIB_PATH = $(STAGE_PATH)/lib' >> bootstrap.mk
+	@echo 'EXT_INCLUDE_PATHS += $(STAGE_PATH)/include' >> bootstrap.mk
+	@echo 'EXT_LIB_PATHS += $(STAGE_PATH)/lib' >> bootstrap.mk
+
+# the bootstrap.sh must also depend on the  library version and gcc version
+bootstrap.sh: version.txt $(TOOLCHAIN_PATH)/gccversion.mk
+	@echo '#! /bin/bash' > bootstrap.sh
+	@echo 'export XG_LIBSUPERMALLOC_INCLUDE_PATH=$(STAGE_PATH)/include' >> bootstrap.sh
+	@chmod a+x bootstrap.sh
+
+.PHONY: bootstrap
+bootstrap: bootstrap.mk bootstrap.sh
+
+.PHONY: all
+all: $(STAGE_PATH)/include/supermalloc_allocator.h bootstrap
+
+# standard clean, note that it must remove the .*.built that the master ext Makefile
+# creates to keep track of whether this library is built or not
+.PHONY: clean
+clean:
+	-(cd $(SRC_PATH) && \
+		make clean)
+	-rm -rf $(STAGE_PATH)
+	-rm -f bootstrap.mk
+	-rm -f bootstrap.sh
+
+#distclean will delete the source directory and force a reextraction of the source archive
+distclean:
+	-rm -rf $(SRC_PATH)
+	-rm -rf $(STAGE_PATH)
+	-rm -f bootstrap.mk
+	-rm -f bootstrap.sh
+

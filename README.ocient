@@ -1,0 +1,45 @@
+Ocient version:     <https://github.com/nliber-ocient/SuperMalloc>
+Original version:   <https://github.com/kuszmaul/SuperMalloc>
+Original fork:      <https://github.com/kuszmaul/SuperMalloc/commit/bd3987458c0dc5b95d2702ba8117f15dda865611>
+
+The Ocient version produces:
+    supermalloc.h: this is a header which contains prototypes for the following C-functions:
+        void* supermalloc_malloc(size_t size);
+        void* supermalloc_calloc(size_t number, size_t size);
+        void  supermalloc_free(void* ptr);
+        void* supermalloc_aligned_alloc(size_t alignment, size_t size);
+        int   supermalloc_posix_memalign(void **memptr, size_t alignment, size_t size);
+        void* supermalloc_memalign(size_t alignment, size_t size);
+        void* supermalloc_realloc(void *p, size_t size);
+
+        size_t supermalloc_malloc_usable_size(const void *ptr);
+
+    supermalloc_allocator.h: C++ interfaces around supermalloc.h functions
+        supermalloc::allocator - C++17 allocator interface based on the above functions
+        supermalloc::memory_resource - C++17 memory resource interface for the above functions
+
+    libsupermalloc.so
+        linkable library for the above which requires transactional memory (haswell)
+
+    libsupermalloc_pthread.so
+        lineable library for the above which uses pthread locks
+
+Note: only link against ONE of the above libraries
+
+make
+make allocator
+    builds the above in the allocator subdirectory
+
+make install
+    copies the artifacts from the allocator subdirectory into the appropriate
+    places them in the appropriate places under $STAGE_PATH (defaults to stage/)
+
+make clean
+    cleans whatever 'make allocator' made as well as any archives
+
+make archive
+    makes a tarball with the commit id as the version
+
+make release
+    build what the original Makefile built by default
+

@@ -6,9 +6,9 @@ allocator:
 	(cd allocator && make)
 
 install: allocator
-	mkdir -p $(STAGE_PATH)/include/ $(STAGE_PATH)/lib/
-	cp allocator/supermalloc.h allocator/supermalloc_allocator.h $(STAGE_PATH)/include/
+	mkdir -p $(STAGE_PATH)/lib/ $(STAGE_PATH)/include/
 	cp allocator/lib/libsupermalloc.so allocator/lib/libsupermalloc_pthread.so $(STAGE_PATH)/lib/
+	cp allocator/supermalloc.h allocator/supermalloc_allocator.h $(STAGE_PATH)/include/
 
 .PHONY: clean
 clean:
