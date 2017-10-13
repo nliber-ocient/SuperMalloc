@@ -6,6 +6,7 @@ VERSION:=$(shell git rev-parse HEAD)
 .PHONY: clean
 clean:
 	(cd allocator && make clean)
+	rm -f supermalloc-*.tar.gz
 
 .PHONY: archive
 archive:
