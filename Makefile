@@ -13,11 +13,11 @@ install: allocator
 .PHONY: clean
 clean:
 	(cd allocator && make clean)
-	rm -f supermalloc-*.tar.gz
+	rm -f libsupermalloc-*.tar.gz
 
 archive: install
 	git diff --quiet	# fails if there are local unstaged changes
-	git archive --prefix=supermalloc-$(VERSION)/ -o supermalloc-$(VERSION).tar.gz $(VERSION)
+	git archive --prefix=libsupermalloc-$(VERSION)/ -o libsupermalloc-$(VERSION).tar.gz $(VERSION)
 
 .PHONY: release
 release:
