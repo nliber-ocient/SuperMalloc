@@ -26,3 +26,5 @@ gdb.txt
 
 # archives
 supermalloc-*.tar.gz
+
+stage/
