@@ -15,7 +15,7 @@ clean:
 	(cd allocator && make clean)
 	rm -f supermalloc-*.tar.gz
 
-archive : allocator
+archive: install
 	git diff --quiet	# fails if there are local unstaged changes
 	git archive --prefix=supermalloc-$(VERSION)/ -o supermalloc-$(VERSION).tar.gz $(VERSION)
 
