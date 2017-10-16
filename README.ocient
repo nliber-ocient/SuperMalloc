@@ -22,7 +22,7 @@ The Ocient version produces:
         linkable library for the above which requires transactional memory (haswell)
 
     libsupermalloc_pthread.so
-        lineable library for the above which uses pthread locks
+        linkable library for the above which uses pthread locks
 
 Note: only link against ONE of the above libraries
 
@@ -42,4 +42,7 @@ make archive
 
 make release
     build what the original Makefile built by default
+
+
+More details on SuperMalloc can be found in the original README (also in this directory).
 
