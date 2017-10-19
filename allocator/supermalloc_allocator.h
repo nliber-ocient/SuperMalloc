@@ -40,7 +40,6 @@ namespace supermalloc
     public:
         using value_type = T;
         using propagate_on_container_move_assignment = std::true_type;
-        using is_always_equal = std::true_type;
 
         constexpr allocator() noexcept = default;
 
@@ -63,6 +62,14 @@ namespace supermalloc
             supermalloc_free(p);
         }
     };
+
+    template<typename L, typename R>
+    constexpr bool operator==(allocator<L> const&, allocator<R> const&) noexcept
+    { return true; }
+
+    template<typename L, typename R>
+    constexpr bool operator!=(allocator<L> const& l, allocator<R> const& r) noexcept
+    { return !(l == r); }
 
     class supermalloc_memory_resource : public pmr::memory_resource
     {
